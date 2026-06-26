@@ -1,0 +1,16 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BACKEND.Models
+{
+    public class Category
+    {
+        [Key]
+        public int CategoryId { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
+        [Required, MaxLength(255)]
+        public string? Descripion { get; set; }
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
+    }
+}

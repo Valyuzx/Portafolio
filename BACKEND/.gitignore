@@ -1,0 +1,15 @@
+Migrations/
+
+bin/
+obj/
+
+.vs/
+*.user
+*.suo
+
+*.log
+
+.env
+
+appsettings.Development.json
+appsettings.Production.json
