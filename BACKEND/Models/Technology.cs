@@ -5,7 +5,7 @@ namespace BACKEND.Models
     public class Technology
     {
         [Key]
-        public int TechnologyId { get; set; }
+        public Guid TechnologyId { get; set; }
 
         [Required]
         [MaxLength(100)]
