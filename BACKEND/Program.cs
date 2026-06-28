@@ -1,16 +1,18 @@
 using BACKEND.BuissnesLayer;
+using BACKEND.Helpers;
 using BACKEND.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager Configuration = builder.Configuration;
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-  .AddJwtBearer(options => { /* Configuración JWT */ });
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<RefreshTokenService>();
+//builder.Services.AddHostedService<BlackListCleanupService>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAccountBL, AccountBL>();
@@ -44,13 +46,39 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+  .AddJwtBearer("Bearer", jwtOptions =>
+  {
+      jwtOptions.Authority = builder.Configuration["Jwt:Authority"];
+      jwtOptions.Audience = builder.Configuration["Jwt:Audience"];
+      jwtOptions.TokenValidationParameters = new TokenValidationParameters
+      {
+          ValidateIssuerSigningKey = true,
+          ValidateIssuer = true,
+          ValidateAudience = true,
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+          ValidAudiences = builder.Configuration.GetSection("Jwt:ValidAudiences").Get<string[]>(),
+          ValidIssuers = builder.Configuration.GetSection("Jwt:ValidIssuers").Get<string[]>(),
+          ValidateLifetime = true,
+          ClockSkew = TimeSpan.Zero
+      };
+
+      jwtOptions.MapInboundClaims = false;
+  });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("UserPolicy", policy => policy.RequireAuthenticatedUser());
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+});
+
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseCors("Frontend");
 app.UseHttpsRedirection();
