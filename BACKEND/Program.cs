@@ -6,19 +6,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Serilog;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) => 
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 ConfigurationManager Configuration = builder.Configuration;
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<RefreshTokenService>();
+builder.Services.AddScoped<BlackListService>();
 //builder.Services.AddHostedService<BlackListCleanupService>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAccountBL, AccountBL>();
 
 builder.Services.AddCors(options =>
-    options.AddPolicy("Frontend", p => p.WithOrigins("...").AllowAnyMethod()));
+    options.AddPolicy("Frontend", p => p
+        .WithOrigins("http://localhost:3000", "http://localhost:5012", "http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(Configuration.GetConnectionString("ApplicationDbContext"))
@@ -57,13 +67,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
           ValidateIssuer = true,
           ValidateAudience = true,
           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
-          ValidAudiences = builder.Configuration.GetSection("Jwt:ValidAudiences").Get<string[]>(),
-          ValidIssuers = builder.Configuration.GetSection("Jwt:ValidIssuers").Get<string[]>(),
+          ValidIssuer = builder.Configuration["Jwt:Issuers"],
+          ValidAudience = builder.Configuration["Jwt:Audience"],
           ValidateLifetime = true,
           ClockSkew = TimeSpan.Zero
       };
-
-      jwtOptions.MapInboundClaims = false;
   });
 
 builder.Services.AddAuthorization(options =>
@@ -71,7 +79,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserPolicy", policy => policy.RequireAuthenticatedUser());
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
 });
-
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -83,6 +90,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("Frontend");
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseMiddleware<BlackListMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 
