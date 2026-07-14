@@ -1,8 +1,7 @@
 Migrations/
-
 bin/
 obj/
-
+logs/
 .vs/
 *.user
 *.suo
