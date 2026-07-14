@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BACKEND.Controllers
 {
@@ -22,13 +23,12 @@ namespace BACKEND.Controllers
         /// <summary>Inicia sesión y retorna los tokens de acceso.</summary>
         /// <response code="200">Login exitoso.</response>
         /// <response code="401">Credenciales incorrectas.</response>
-        [HttpPost("v1/accounts/login")]
         [AllowAnonymous]
+        [HttpPost("v1/accounts/login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginDTO)
         {
-            // UnauthorizedException → GlobalExceptionHandler → 401 ProblemDetails
             var resultado = await _accountBL.LoginAsync(loginDTO);
             return Ok(resultado);
         }
@@ -36,13 +36,12 @@ namespace BACKEND.Controllers
         /// <summary>Registra un nuevo usuario con rol User.</summary>
         /// <response code="201">Usuario registrado exitosamente.</response>
         /// <response code="409">El correo ya está registrado.</response>
-        [HttpPost("v1/accounts/register")]
         [AllowAnonymous]
+        [HttpPost("v1/accounts/register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerDTO)
         {
-            // ConflictException / NotFoundException → GlobalExceptionHandler
             await _accountBL.RegisterAsync(registerDTO);
             return StatusCode(StatusCodes.Status201Created,
                 new { mensaje = "Usuario registrado exitosamente." });
@@ -51,8 +50,8 @@ namespace BACKEND.Controllers
         /// <summary>Registra un nuevo usuario con rol Admin.</summary>
         /// <response code="201">Admin registrado exitosamente.</response>
         /// <response code="409">El correo ya está registrado.</response>
-        [HttpPost("v1/accounts/registerAdmin")]
         [Authorize(Policy = "AdminPolicy")]
+        [HttpPost("v1/accounts/registerAdmin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterRequestDTO registerDTO)
@@ -65,8 +64,8 @@ namespace BACKEND.Controllers
         /// <summary>Renueva el access token usando un refresh token válido.</summary>
         /// <response code="200">Tokens renovados.</response>
         /// <response code="401">Refresh token inválido o expirado.</response>
-        [HttpPost("v1/accounts/refresh")]
         [AllowAnonymous]
+        [HttpPost("v1/accounts/refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
@@ -100,7 +99,22 @@ namespace BACKEND.Controllers
             return NoContent();
         }
 
+        [HttpGet("v1/accounts/validate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> ValidateToken()
+        {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return Unauthorized();
+            }
+            var isValid = await _accountBL.ValidateTokenAsync(accessToken);
+            return isValid ? Ok(new { valid = true }) : Unauthorized();
+        }
+
         private string? GetClientIpAddress() =>
             HttpContext.Connection.RemoteIpAddress?.ToString();
+    
     }
 }

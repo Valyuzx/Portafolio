@@ -70,7 +70,7 @@ namespace BACKEND.BuissnesLayer
             {
                 UserId    = userId,
                 Email     = normalizedEmail,
-                Password  = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
+                Password  = BCrypt.Net.BCrypt.HashPassword(registerDto.Password, workFactor: 10),
                 IsActive  = true,
                 CreatedAt = DateTime.UtcNow,
                 UserName  = registerDto.UserName,
@@ -109,8 +109,7 @@ namespace BACKEND.BuissnesLayer
             string accessToken = _tokenService.GenerateJwtToken(user);
         
             var refreshTokenEntity = await _refreshTokenService.CreateRefreshTokenAsync(user.UserId);
-            var expiresAt          = _tokenService.GetTokenExpiration(accessToken)
-                                     ?? DateTime.UtcNow.AddMinutes(60);
+            var expiresAt = _tokenService.GetTokenExpiration(accessToken)?? DateTime.UtcNow.AddMinutes(60);
 
             _logger.LogInformation("Login exitoso. Email: {Email} | UserId: {UserId}", user.Email, user.UserId);
 
@@ -154,6 +153,18 @@ namespace BACKEND.BuissnesLayer
             await _refreshTokenService.RevokeAllUserTokensAsync(userId);
 
             _logger.LogInformation("Logout exitoso. UserId: {UserId}", userId);
+        }
+
+        public async Task<bool> ValidateTokenAsync(string accessToken)
+        {
+            var jti = _tokenService.GetJtiFromToken(accessToken);
+            if (jti == null) return false;
+
+            if (await _blackListService.IsBlackListedAsync(jti)) return false;
+
+            var expiration = _tokenService.GetTokenExpiration(accessToken);
+            if (expiration == null || expiration < DateTime.UtcNow) return false;
+            return true;
         }
     }
 }

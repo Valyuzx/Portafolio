@@ -8,5 +8,6 @@ namespace BACKEND.BuissnesLayer
         Task<AuthResponseDTO> LoginAsync(LoginRequestDTO loginDto);
         Task<RefreshTokenResponseDTO> RefreshTokenAsync(string refreshToken, string? ipAddress = null);
         Task LogoutAsync(string accessToken, string? refreshToken, Guid userId);
+        Task<bool> ValidateTokenAsync(string accessToken);
     }
 }
