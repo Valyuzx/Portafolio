@@ -197,6 +197,9 @@ dotnet ef database update
 
 # Levantar en modo desarrollo
 dotnet run
+
+<img width="1861" height="1070" alt="imagen" src="https://github.com/user-attachments/assets/3e362324-3c09-43f5-a5a5-4fe125a46f48" />
+
 ```
 
 El API quedará disponible en:
