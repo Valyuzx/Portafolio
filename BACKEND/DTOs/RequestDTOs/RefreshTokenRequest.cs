@@ -1,0 +1,7 @@
+﻿namespace BACKEND.DTOs.RequestDTOs
+{
+    public class RefreshTokenRequest
+    {
+        public string RefreshToken { get; set; } = string.Empty;
+    }
+}

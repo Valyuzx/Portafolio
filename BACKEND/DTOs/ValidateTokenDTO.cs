@@ -2,8 +2,8 @@
 {
     public class ValidateTokenDTO
     {
-        public string TokenId { get; set; } = null!; //jti del token
-        public string Token { get; set; } = null!;
+        public string TokenId { get; set; } = string.Empty;
+        public string Token { get; set; } = string.Empty;
         public DateTime ExpiryDate { get; set; }
     }
 }

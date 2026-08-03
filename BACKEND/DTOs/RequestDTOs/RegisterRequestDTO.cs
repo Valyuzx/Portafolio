@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BACKEND.DTOs
+namespace BACKEND.DTOs.RequestDTOs
 {
     public class RegisterRequestDTO
     {
@@ -16,8 +16,6 @@ namespace BACKEND.DTOs
         [Required(ErrorMessage = "La contraseña es obligatoria.")]
         [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
         public string Password { get; set; } = string.Empty;
-
-        public string RoleName { get; set; } = "User";
-
     }
 }
+

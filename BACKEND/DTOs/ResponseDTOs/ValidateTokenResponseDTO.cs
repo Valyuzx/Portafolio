@@ -1,4 +1,4 @@
-﻿namespace BACKEND.DTOs
+namespace BACKEND.DTOs.ResponseDTOs
 {
     public class ValidateTokenResponseDTO
     {
