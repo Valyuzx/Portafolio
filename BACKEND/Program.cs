@@ -1,5 +1,6 @@
 using BACKEND.BuissnesLayer;
 using BACKEND.Helpers;
+using BACKEND.Middlewares;
 using BACKEND.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,10 +18,16 @@ ConfigurationManager Configuration = builder.Configuration;
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<RefreshTokenService>();
 builder.Services.AddScoped<BlackListService>();
-//builder.Services.AddHostedService<BlackListCleanupService>();
+builder.Services.AddHostedService<BlackListCleanupService>();
 
 builder.Services.AddControllers();
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddScoped<IAccountBL, AccountBL>();
+builder.Services.AddScoped<IProjectBL, ProjectBL>();
+builder.Services.AddScoped<ICategoryBL, CategoryBL>(); 
+builder.Services.AddScoped<ITechnologyBL, TechnologyBL>();
 
 builder.Services.AddCors(options =>
     options.AddPolicy("Frontend", p => p
@@ -88,6 +94,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("Frontend");
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseMiddleware<BlackListMiddleware>();
