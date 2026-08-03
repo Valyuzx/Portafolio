@@ -8,8 +8,7 @@ namespace BACKEND.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ProjectId { get; set; }
-        [Required]
-        [MaxLength(150)]
+        [Required] [MaxLength(150)]
         public string Title { get; set; } = string.Empty;
 
         [Required]
@@ -20,7 +19,6 @@ namespace BACKEND.Models
         [MaxLength(300)]
         public string Description { get; set; } = string.Empty;
         public string? RepositoryURL { get; set; }
-        public string? DemoUrl { get; set; }
         [Required]
         public string PrincipalImageUrl { get; set; } = string.Empty;
         public DateTime DevelopmentDate { get; set; }
@@ -29,6 +27,7 @@ namespace BACKEND.Models
         public Guid CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; } = null!;
+        
         public ICollection<ProjectTechnology> ProyectoTecnologys { get; set; } = new List<ProjectTechnology>();
     }
 }
