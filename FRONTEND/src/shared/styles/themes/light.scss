@@ -1,0 +1,14 @@
+body.light-mode {
+  --color-background: #f8fafc;
+  --color-surface: rgba(255, 255, 255, 0.90);
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-border: rgba(42, 38, 15, 0.1);
+  
+  --auth-card-gradient: linear-gradient(104.99deg, rgba(226, 232, 240, 0.80) -13.91%, rgba(226, 232, 240, 0) 100.48%);
+
+  --btn-primary-bg: rgb(40 82 200 / 1);
+  // Ajustes de botones para modo claro
+  --btn-secondary-hover-bg: rgba(124, 58, 237, 0.06);
+  --btn-primary-hover-shadow: 0 0 22px rgba(124, 58, 237, 0.25);
+}

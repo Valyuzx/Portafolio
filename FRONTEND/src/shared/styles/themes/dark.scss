@@ -1,0 +1,32 @@
+// Tema por defecto (Modo oscuro)
+:root {
+  --color-primary: #7c3aed;
+  --color-primary-gradient: linear-gradient(135deg, #7c3aed, #6366f1);
+  --color-secondary: #c5c6f8;
+  --color-tertiary: #0ea5e9;
+  --color-success: #22c55e;
+  
+  --color-background: #0f172a;
+  --color-surface: rgba(30, 41, 59, 0.80);
+  --color-border: rgba(148, 163, 184, 0.12);
+
+  --auth-card-gradient: linear-gradient(104.99deg, rgba(30, 41, 59, 0.70) -13.91%, rgba(30, 41, 59, 0) 100.48%);
+
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+
+  // BUTTON COLORS
+  --btn-primary-bg: var(--color-primary-gradient);
+  --btn-primary-color: #ffffff;
+  --btn-primary-hover-shadow: 0 0 22px rgba(83, 42, 154, 0.4);
+  --btn-primary-disabled-opacity: 0.50;
+
+  --btn-secondary-bg: transparent;
+  --btn-secondary-color: var(--color-primary);
+  --btn-secondary-border: var(--color-primary);
+  --btn-secondary-hover-bg: rgba(124, 58, 237, 0.08);
+
+  --btn-ghost-bg: transparent;
+  --btn-ghost-color: var(--color-text-secondary);
+  --btn-ghost-hover-color: var(--color-text-primary);
+}
