@@ -1,0 +1,238 @@
+@use '../../../shared/styles/abstracts/mixin' as mix;
+
+.auth-wrapper {
+  min-height: 100vh;
+  @include mix.flex-center;
+  background-color: var(--color-background);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(124, 58, 237, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+  padding: 2rem 1rem;
+}
+
+.theme-toggle-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--app-radius-lg);
+  padding: 2.5rem 2.5rem;
+}
+
+.auth-headline {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0 0 1.75rem;
+  letter-spacing: -0.01em;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.auth-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-radius: var(--app-radius-lg);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+
+  // Estado inactivo — ghost/secondary
+  &:not(.auth-tab--active) {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--color-border);
+
+    &:hover {
+      background: var(--color-secondary);
+      color: var(--color-text-primary);
+      border-color: var(--color-primary);
+    }
+  }
+
+  &--active {
+    background: var(--color-text-primary);
+    color: var(--color-background);
+    font-weight: 700;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+}
+
+// ─── Form ─────────────────────────────────────────────────────────────────────
+.auth-form {
+  @include mix.flex-column(1rem);
+}
+
+::ng-deep .field-full {
+  width: 100%;
+}
+
+.auth-form {
+  ::ng-deep {
+
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) {
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: var(--color-border) !important;
+      }
+    }
+
+    // Borde hover
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover {
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: rgba(148, 163, 184, 0.35) !important;
+      }
+    }
+
+    // Borde focus
+    .mdc-text-field--outlined.mdc-text-field--focused {
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: var(--color-primary) !important;
+        border-width: 1.5px !important;
+      }
+    }
+
+    // Fondo del input
+    .mdc-text-field--outlined .mdc-text-field__input {
+      color: var(--color-text-primary);
+    }
+
+    // Label color
+    .mat-mdc-form-field-label,
+    .mdc-floating-label {
+      color: var(--color-text-secondary) !important;
+    }
+
+    .mat-mdc-form-field-icon-suffix mat-icon {
+      color: var(--color-text-secondary);
+      opacity: 0.7;
+    }
+  }
+}
+
+.password-requirements {
+  background: rgba(0, 0, 0, 0.20);
+  border: 1px solid var(--color-border);
+  border-radius: var(--app-radius-md);
+  padding: 1rem 1.25rem;
+  margin-top: -0.25rem;
+
+  &__title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.75rem;
+  }
+
+  &__list {
+    @include mix.flex-column(0.5rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+
+    &--met {
+      color: var(--color-success);
+    }
+
+    mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      transition: color 0.2s ease;
+    }
+  }
+}
+
+// ─── Row: forgot + submit ─────────────────────────────────────────────────────
+.login-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  gap: 1rem;
+}
+
+// ─── Forgot password ─────────────────────────────────────────────────────────
+.link-forgot {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+// ─── Submit wrapper
+.btn-submit-wrapper {
+  width: 100%;
+  margin-top: 0.5rem;
+
+  ::ng-deep .form-submit-btn {
+    width: 100%;
+  }
+}
+
+// ─── Links de acción 
+.link-action {
+  color: var(--color-primary) !important;
+  font-weight: 500;
+}
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+.auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,45 @@
+<div class="page-container">
+
+  <!-- ── Cabecera de página ─────────────────────────────────────────────── -->
+  <app-page-header
+    title="Tecnologías"
+    subtitle="Gestiona el stack tecnológico de tu portafolio"
+  >
+    <app-button icon="add" (click)="openCreateDialog()">
+      Nueva Tecnología
+    </app-button>
+  </app-page-header>
+
+  <!-- ── Banner de error global ────────────────────────────────────────── -->
+  <app-error-banner [message]="errorMessage()" />
+
+  <!-- ── Estado de carga ────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="state-container">
+      <mat-spinner diameter="40" />
+      <p>Cargando tecnologías…</p>
+    </div>
+
+  <!-- ── Estado vacío ───────────────────────────────────────────────────── -->
+  } @else if (technologies().length === 0) {
+    <div class="state-container">
+      <mat-icon>memory</mat-icon>
+      <p>No hay tecnologías aún. Crea la primera.</p>
+    </div>
+
+  <!-- ── Lista de tecnologías ───────────────────────────────────────────── -->
+  } @else {
+    <div class="circular-grid">
+      @for (tech of technologies(); track tech.technologyId) {
+        <app-circular-item
+          [name]="tech.name"
+          [imageUrl]="tech.iconUrl"
+          iconName="code"
+          (edit)="openEditDialog(tech)"
+          (delete)="deleteTechnology(tech)"
+        />
+      }
+    </div>
+  }
+
+</div>

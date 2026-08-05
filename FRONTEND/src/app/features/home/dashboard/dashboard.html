@@ -1,0 +1,16 @@
+<section class="hero">
+  <h1 class="hero-title">Hola, {{ user()?.name ?? 'usuario' }}</h1>
+  <p class="hero-subtitle">Bienvenido a tu portafolio personal</p>
+</section>
+
+<section class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon" style="background: app-shadow; color: app-primary">
+      <mat-icon>folder_open</mat-icon>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">{{ projectService.projects().length }}</span>
+      <span class="stat-label">Proyectos</span>
+    </div>
+  </div>
+</section>

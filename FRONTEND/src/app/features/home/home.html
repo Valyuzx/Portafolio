@@ -1,0 +1,26 @@
+<mat-sidenav-container class="dashboard-container">
+  
+  <!-- Sidebar responsivo -->
+  <mat-sidenav #sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()" class="sidenav">
+    <app-sidebar 
+      [menuItems]="menuItems" 
+      (closeSidebar)="isMobile() ? sidenav.close() : null">
+    </app-sidebar>
+  </mat-sidenav>
+
+  <!-- Contenido principal -->
+  <mat-sidenav-content class="main-content">
+    
+    <app-topbar 
+      [showMenuButton]="isMobile()" 
+      (toggleMenu)="sidenav.toggle()">
+    </app-topbar>
+
+    <!-- Área dinámica -->
+    <main class="content-wrapper">
+      <router-outlet></router-outlet>
+    </main>
+    
+  </mat-sidenav-content>
+  
+</mat-sidenav-container>

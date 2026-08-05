@@ -1,0 +1,36 @@
+.top-navbar {
+  background: var(--app-surface-card);
+  border-bottom: 1px solid var(--app-border);
+  display: flex;
+  padding: 0 1.5rem;
+}
+
+.spacer {
+  flex: 1 1 auto; // Empuja los elementos a la derecha
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .user-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--app-text-primary);
+    display: none; 
+    
+    @media (min-width: 600px) {
+      display: block; 
+    }
+  }
+
+  button {
+    color: var(--app-text-secondary);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--app-text-primary);
+    }
+  }
+}

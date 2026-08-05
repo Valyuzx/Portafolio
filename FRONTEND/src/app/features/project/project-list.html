@@ -1,0 +1,59 @@
+<div class="page-container">
+
+  <app-page-header title="Mis Proyectos" subtitle="Gestiona los proyectos de tu portafolio">
+    <app-button icon="add" routerLink="create">
+      Nuevo Proyecto
+    </app-button>
+  </app-page-header>
+
+  @if (isLoading()) {
+    <div class="state-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando tu información...</p>
+    </div>
+  } @else if (projects().length === 0) {
+    <div class="state-container empty-state">
+      <mat-icon>folder_off</mat-icon>
+      <p>No tienes proyectos registrados aún. ¡Agrega el primero!</p>
+    </div>
+  } @else {
+    <div class="projects-grid">
+      @for (project of projects(); track project.id) {
+        <mat-card class="project-card" [class.card-draft]="!project.isPublished">
+          <div class="card-image-wrapper">
+            <div class="status-badge"
+              [class.badge-published]="project.isPublished"
+              [class.badge-draft]="!project.isPublished">
+              {{ project.isPublished ? 'Publicado' : 'Borrador' }}
+            </div>
+          </div>
+
+          <mat-card-header>
+            <mat-card-title class="card-title">{{ project.title }}</mat-card-title>
+            <mat-card-subtitle>{{ project.developmentDate | date:'mediumDate' }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content class="card-content">
+            <p class="resume-text">{{ project.resume }}</p>
+            <mat-chip-set>
+              <mat-chip class="category-chip">{{ project.categoryName ?? 'Sin categoría' }}</mat-chip>
+            </mat-chip-set>
+          </mat-card-content>
+
+          <mat-card-actions align="end" class="card-actions">
+            @if (project.repositoryURL) {
+              <a matIconButton [href]="project.repositoryURL" target="_blank" matTooltip="Ver código fuente">
+                <mat-icon>code</mat-icon>
+              </a>
+            }
+            <span class="spacer"></span>
+            <button matIconButton [routerLink]="['edit', project.id]" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>

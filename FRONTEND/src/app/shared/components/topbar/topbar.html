@@ -1,0 +1,27 @@
+<mat-toolbar class="top-navbar">
+  @if (showMenuButton()) {
+    <button mat-icon-button (click)="toggleMenu.emit()" aria-label="Abrir menú" matTooltip="Menú">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+
+  <span class="spacer"></span>
+
+  <div class="user-profile">
+    <button mat-icon-button 
+            (click)="onToggleTheme()" 
+            [attr.aria-label]="'Cambiar a ' + themeTooltip()" 
+            [matTooltip]="themeTooltip()">
+      <mat-icon>{{ themeIcon() }}</mat-icon>
+    </button>
+    
+    <span class="user-name">{{ displayName() }}</span>
+    
+    <button mat-icon-button 
+            (click)="onLogout()" 
+            aria-label="Cerrar sesión" 
+            matTooltip="Cerrar sesión">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>

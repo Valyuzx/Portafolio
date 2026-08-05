@@ -1,0 +1,31 @@
+<app-auth-layout icon="lock" title="Inicia sesión o regístrate para continuar">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
+
+    <mat-form-field appearance="outline" class="field-full">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput formControlName="email" type="email" autocomplete="email" placeholder="correo@ejemplo.com" />
+      <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+      @if (form.controls.email.hasError('required')) {
+      <mat-error>El correo es obligatorio</mat-error>
+      } @else if (form.controls.email.hasError('email')) {
+      <mat-error>Formato de correo inválido</mat-error>
+      }
+    </mat-form-field>
+
+    <app-password-field [control]="form.controls.password" autocomplete="current-password" [errorMessage]="
+        form.controls.password.hasError('required') ? 'La contraseña es obligatoria' :
+        form.controls.password.hasError('minlength') ? 'Mínimo 8 caracteres' : ''
+      ">
+    </app-password-field>
+
+    <app-error-banner [message]="errorMessage()" />
+
+    <div class="login-actions">
+      <a routerLink="/forgot-password" class="link-forgot">¿Olvidaste tu contraseña?</a>
+      <app-button type="submit" [loading]="isLoading()" [disabled]="form.invalid" loadingLabel="Cargando...">
+        Iniciar sesión
+      </app-button>
+    </div>
+
+  </form>
+</app-auth-layout>

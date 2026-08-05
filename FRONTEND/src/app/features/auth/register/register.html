@@ -1,0 +1,87 @@
+<app-auth-layout icon="person_add" title="Inicia sesión o regístrate para continuar">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
+
+    <mat-form-field appearance="outline" class="field-full">
+      <mat-label>Nombre de usuario</mat-label>
+      <input matInput formControlName="userName" autocomplete="username" placeholder="ej. juan_perez" />
+      <mat-icon matSuffix aria-hidden="true">person</mat-icon>
+      @if (form.controls.userName.hasError('required')) {
+        <mat-error>El nombre de usuario es obligatorio</mat-error>
+      } @else if (form.controls.userName.hasError('maxlength')) {
+        <mat-error>Máximo 100 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field-full">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput formControlName="email" type="email" autocomplete="email" placeholder="correo@ejemplo.com" />
+      <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+      @if (form.controls.email.hasError('required')) {
+        <mat-error>El correo es obligatorio</mat-error>
+      } @else if (form.controls.email.hasError('email')) {
+        <mat-error>Formato de correo inválido</mat-error>
+      } @else if (form.controls.email.hasError('maxlength')) {
+        <mat-error>Máximo 255 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <app-password-field
+      [control]="form.controls.password"
+      autocomplete="new-password"
+      [errorMessage]="
+        form.controls.password.hasError('required') ? 'La contraseña es obligatoria' : ''
+      ">
+    </app-password-field>
+
+    <app-password-field
+      [control]="form.controls.confirmPassword"
+      label="Confirmar contraseña"
+      autocomplete="new-password"
+      [errorMessage]="
+        form.controls.confirmPassword.hasError('required') ? 'Confirma tu contraseña' :
+        (form.hasError('passwordMismatch') && form.controls.confirmPassword.dirty) ? 'Las contraseñas no coinciden' : ''
+      ">
+    </app-password-field>
+
+    <!-- Requisitos de contraseña -->
+    <div class="password-requirements">
+      <p class="password-requirements__title">Requisitos de contraseña</p>
+      <ul class="password-requirements__list">
+        <li class="password-requirements__item" [class.password-requirements__item--met]="requirements().hasNumber">
+          <mat-icon>{{ requirements().hasNumber ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          <span>Un número</span>
+        </li>
+        <li class="password-requirements__item" [class.password-requirements__item--met]="requirements().hasUppercase">
+          <mat-icon>{{ requirements().hasUppercase ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          <span>Una letra mayúscula</span>
+        </li>
+        <li class="password-requirements__item" [class.password-requirements__item--met]="requirements().hasLowercase">
+          <mat-icon>{{ requirements().hasLowercase ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          <span>Una letra minúscula</span>
+        </li>
+        <li class="password-requirements__item" [class.password-requirements__item--met]="requirements().hasMinLength">
+          <mat-icon>{{ requirements().hasMinLength ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          <span>Mínimo 8 caracteres</span>
+        </li>
+        <li class="password-requirements__item" [class.password-requirements__item--met]="requirements().passwordsMatch">
+          <mat-icon>{{ requirements().passwordsMatch ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          <span>Las contraseñas coinciden</span>
+        </li>
+      </ul>
+    </div>
+
+    <app-error-banner [message]="errorMessage()" />
+
+    <div class="login-actions">
+      <span></span>
+      <app-button
+        type="submit"
+        [loading]="isLoading()"
+        [disabled]="form.invalid"
+        loadingLabel="Registrando...">
+        Continuar
+      </app-button>
+    </div>
+
+  </form>
+</app-auth-layout>

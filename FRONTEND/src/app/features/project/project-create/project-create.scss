@@ -1,0 +1,64 @@
+// =============================================================================
+// PROJECT CREATE — Formulario de registro de proyectos
+// Los estilos de .page-header y .page-container viven en PageHeader y styles.scss.
+// Aquí solo estilos específicos de este formulario.
+// =============================================================================
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+// ── Form Wrapper ──────────────────────────────────────────────────────────────
+.project-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+// ── Two-Column Grid (se apila en móvil) ───────────────────────────────────────
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Campos de ancho completo ───────────────────────────────────────────────────
+.field-full {
+  width: 100%;
+}
+
+// ── Toggle row (slide-toggle + label) ────────────────────────────────────────
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  color: var(--app-text-secondary);
+  font: var(--mat-sys-body-medium);
+}
+
+// ── Footer del formulario ─────────────────────────────────────────────────────
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+
+    app-button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<div class="circular-item-container">
+  <!-- El círculo interactivo -->
+  <button 
+    class="circular-badge" 
+    [style.background]="imageUrl ? 'transparent' : displayColor()"
+    (click)="selectItem.emit()"
+    [matMenuTriggerFor]="itemMenu"
+  >
+    @if (imageUrl) {
+      <img [src]="imageUrl" [alt]="name" loading="lazy" class="badge-image" />
+    } @else if (iconName) {
+      <mat-icon class="badge-icon">{{ iconName }}</mat-icon>
+    } @else {
+      <span class="badge-letter">{{ firstLetter() }}</span>
+    }
+    
+    <!-- Indicador de que tiene un menú o acciones (opcional, mostrado on hover) -->
+    <div class="badge-overlay">
+      <mat-icon>more_vert</mat-icon>
+    </div>
+  </button>
+
+  <!-- Texto debajo del círculo -->
+  <span class="item-name" [title]="name">{{ name }}</span>
+</div>
+
+<!-- Menú contextual para Editar / Eliminar -->
+<mat-menu #itemMenu="matMenu" xPosition="after">
+  <button mat-menu-item (click)="edit.emit()">
+    <mat-icon>edit</mat-icon>
+    <span>Editar</span>
+  </button>
+  <button mat-menu-item (click)="delete.emit()" class="menu-delete-item">
+    <mat-icon color="warn">delete_outline</mat-icon>
+    <span class="text-danger">Eliminar</span>
+  </button>
+</mat-menu>

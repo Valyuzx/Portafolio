@@ -1,0 +1,148 @@
+<div class="page-container">
+
+  <!-- ── Page Header ─────────────────────────────────────────────────────── -->
+  <app-page-header
+    title="Nuevo Proyecto"
+    subtitle="Completa la información para agregar un proyecto a tu portafolio"
+  >
+    <app-button variant="secondary" type="button" routerLink="/home/projects">
+      Cancelar
+    </app-button>
+    <app-button
+      type="button"
+      [loading]="isLoading()"
+      [disabled]="form.invalid"
+      icon="save"
+      loadingLabel="Guardando..."
+      (click)="onSubmit()">
+      Guardar Proyecto
+    </app-button>
+  </app-page-header>
+
+  <!-- ── Formulario ────────────────────────────────────────────────────────── -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="project-form">
+
+    <!-- SECCIÓN 1: Información principal -->
+    <app-form-section title="Información principal">
+
+      <div class="form-grid-2">
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Título</mat-label>
+          <mat-icon matPrefix aria-hidden="true">title</mat-icon>
+          <input matInput formControlName="title" placeholder="Mi proyecto increíble" />
+          @if (form.controls.title.hasError('required')) {
+            <mat-error>El título es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Categoría</mat-label>
+          <mat-icon matPrefix aria-hidden="true">category</mat-icon>
+          <mat-select formControlName="categoryId">
+            @for (cat of categories(); track cat.categoryId) {
+              <mat-option [value]="cat.categoryId">{{ cat.name }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.categoryId.hasError('required')) {
+            <mat-error>La categoría es obligatoria</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="field-full">
+        <mat-label>Tecnologías</mat-label>
+        <mat-icon matPrefix aria-hidden="true">code</mat-icon>
+        <mat-select formControlName="technologyIds" multiple>
+          @for (tech of technologies(); track tech.technologyId) {
+            <mat-option [value]="tech.technologyId">{{ tech.name }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.technologyIds.hasError('required')) {
+          <mat-error>Selecciona al menos una tecnología</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-full">
+        <mat-label>Resumen</mat-label>
+        <mat-icon matPrefix aria-hidden="true">short_text</mat-icon>
+        <textarea matInput formControlName="resume" rows="2"
+          placeholder="Descripción breve del proyecto..."></textarea>
+        @if (form.controls.resume.hasError('required')) {
+          <mat-error>El resumen es obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-full">
+        <mat-label>Descripción detallada</mat-label>
+        <mat-icon matPrefix aria-hidden="true">notes</mat-icon>
+        <textarea matInput formControlName="description" rows="5"
+          placeholder="Explica el contexto, retos y decisiones técnicas..."></textarea>
+        @if (form.controls.description.hasError('required')) {
+          <mat-error>La descripción es obligatoria</mat-error>
+        }
+      </mat-form-field>
+
+    </app-form-section>
+
+    <!-- SECCIÓN 2: Links y recursos -->
+    <app-form-section title="Links y recursos">
+
+      <mat-form-field appearance="outline" class="field-full">
+        <mat-label>URL de la imagen principal</mat-label>
+        <mat-icon matPrefix aria-hidden="true">image</mat-icon>
+        <input matInput formControlName="principalImageUrl" placeholder="https://ejemplo.com/imagen.png" />
+        @if (form.controls.principalImageUrl.hasError('required')) {
+          <mat-error>La URL de la imagen es obligatoria</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-full">
+        <mat-label>URL del repositorio</mat-label>
+        <mat-icon matPrefix aria-hidden="true">source</mat-icon>
+        <input matInput formControlName="repositoryURL" placeholder="https://github.com/usuario/repo" />
+      </mat-form-field>
+
+    </app-form-section>
+
+    <!-- SECCIÓN 3: Configuración -->
+    <app-form-section title="Configuración">
+
+      <div class="form-grid-2">
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Fecha de desarrollo</mat-label>
+          <mat-icon matPrefix aria-hidden="true">calendar_today</mat-icon>
+          <input matInput type="date" formControlName="developmentDate" />
+          @if (form.controls.developmentDate.hasError('required')) {
+            <mat-error>La fecha es obligatoria</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="toggle-row">
+          <mat-slide-toggle formControlName="isPublished">
+            Publicar en el portafolio
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+    </app-form-section>
+
+    <!-- Error banner -->
+    <app-error-banner [message]="errorMessage()" />
+
+    <!-- ── Footer (acciones del formulario en móvil) ────────────────────── -->
+    <div class="form-footer">
+      <app-button variant="secondary" type="button" routerLink="/home/projects">
+        Cancelar
+      </app-button>
+      <app-button
+        type="submit"
+        [loading]="isLoading()"
+        [disabled]="form.invalid"
+        icon="save"
+        loadingLabel="Guardando...">
+        Guardar Proyecto
+      </app-button>
+    </div>
+
+  </form>
+</div>

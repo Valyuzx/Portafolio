@@ -1,0 +1,19 @@
+<div class="sidenav-header">
+  <div class="brand-logo">
+    <mat-icon class="brand-icon">auto_awesome</mat-icon>
+  </div>
+  <h2 class="brand-title">Admin Panel</h2>
+</div>
+
+<mat-nav-list class="nav-list">
+  @for (item of menuItems(); track item.route) {
+    <a mat-list-item 
+       [routerLink]="item.route" 
+       routerLinkActive="active-link" 
+       [routerLinkActiveOptions]="{exact: true}"
+       (click)="onItemClick()">
+      <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+      <span matListItemTitle>{{ item.label }}</span>
+    </a>
+  }
+</mat-nav-list>

@@ -1,0 +1,43 @@
+<div class="page-container">
+
+  <!-- ── Cabecera de página ─────────────────────────────────────────────── -->
+  <app-page-header
+    title="Categorías"
+    subtitle="Gestiona las categorías de tus proyectos"
+  >
+    <app-button icon="add" (click)="openCreateDialog()">
+      Nueva Categoría
+    </app-button>
+  </app-page-header>
+
+  <!-- ── Banner de error global (delete con proyectos asociados, etc.) ──── -->
+  <app-error-banner [message]="errorMessage()" />
+
+  <!-- ── Estado de carga ────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="state-container">
+      <mat-spinner diameter="40" />
+      <p>Cargando categorías…</p>
+    </div>
+
+  <!-- ── Estado vacío ───────────────────────────────────────────────────── -->
+  } @else if (categories().length === 0) {
+    <div class="state-container">
+      <mat-icon>category</mat-icon>
+      <p>No hay categorías aún. Crea la primera.</p>
+    </div>
+
+  <!-- ── Lista de categorías ────────────────────────────────────────────── -->
+  } @else {
+    <div class="circular-grid">
+      @for (cat of categories(); track cat.categoryId) {
+        <app-circular-item
+          [name]="cat.name"
+          (edit)="openEditDialog(cat)"
+          (delete)="deleteCategory(cat)"
+        />
+      }
+    </div>
+  }
+
+</div>

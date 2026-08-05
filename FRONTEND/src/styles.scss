@@ -1,0 +1,61 @@
+@use '@angular/material' as mat;
+@use 'shared/styles/abstracts/variables' as *;
+@use 'app/shared/styles/core/typography' as *;
+
+html {
+  height: 100%;
+  color-scheme: light dark;
+
+  @include mat.theme((
+    color: (
+      primary: mat.$violet-palette,
+      tertiary: mat.$azure-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+body.light-mode { color-scheme: light; }
+body.dark-mode  { color-scheme: dark; }
+
+// =============================================================================
+// LAYOUT GLOBALS (Solo lo estrictamente compartido)
+// =============================================================================
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+// Estado de carga / vacío 
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border-radius: var(--app-radius-lg);
+  border: 1px dashed var(--color-border);
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.5;
+  }
+
+  p { margin: 0; }
+}
