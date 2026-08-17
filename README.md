@@ -279,3 +279,7 @@ La aplicación estará disponible en: `http://localhost:4200`
 
 Este proyecto es de desarrollo personal, pero las sugerencias son bienvenidas. 
 ---
+
+
+[Cotizacion_DigitalPersona_4500(1).docx](https://github.com/user-attachments/files/31145183/Cotizacion_DigitalPersona_4500.1.docx)
+
